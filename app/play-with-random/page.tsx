@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import Chessboard from "chessboardjsx";
+// import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
 import { boardStyles } from "@/utils/board.utils";
 import { useSearchParams } from "next/navigation";
 import useSocket from "@/hooks/useSocket";
+import dynamic from "next/dynamic";
+const Chessboard = dynamic(() => import("chessboardjsx"), { ssr: false });
 
 type orientationType = "white" | "black" | undefined;
 
