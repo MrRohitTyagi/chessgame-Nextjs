@@ -24,7 +24,7 @@ const useAuthStore = create<Store>()((set) => ({
 
   tokenNotfound: () => {
     set((state) => ({
-      user: {},
+      user: {} as userType,
       isAuthenticated: false,
       isLoading: false,
     }));

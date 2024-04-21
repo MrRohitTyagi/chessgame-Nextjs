@@ -13,6 +13,7 @@ import MyLoader from "@/components/Loader/Loader";
 import useSocket from "@/hooks/useSocket";
 import FakeSearching from "@/components/FakeSearching";
 import PlayerCard from "@/components/PlayerCard";
+import { redirectionConfig } from "@/utils/redirection.routes";
 
 type playTypeTypes = "JOIN-ROOM" | "CREATE-ROOM" | "jOIN-RANDOM" | null;
 const headings = {
@@ -34,7 +35,6 @@ function PlayOnline() {
   const handleCreateRoom = () => setplayType("CREATE-ROOM");
 
   const closeLayer = () => setplayType(null);
-  console.log(playType);
 
   return (
     <>
@@ -67,9 +67,6 @@ function PlayOnline() {
           className="lg:w-[500px]"
         />
         <div className="controllsborder rounded items-center flex flex-col space-y-4">
-          <h1 className="text-3xl text-center sm:text-4xl">
-            Play Chess Online !
-          </h1>
           <Button
             onClick={handlePlayRandom}
             className="w-60 space-x-2 h-16 shadow-green"
@@ -108,9 +105,9 @@ const RenderDialogues = ({
 }) => {
   switch (playType) {
     case "CREATE-ROOM":
-      return;
+      return <CreateRoom />;
     case "JOIN-ROOM":
-      return;
+      return <JoinRoom />;
     case "jOIN-RANDOM":
       return <PlayWithRandom />;
 
@@ -118,10 +115,13 @@ const RenderDialogues = ({
       return null;
   }
 };
+const JoinRoom = () => "Under development";
+const CreateRoom = () => "Under development";
 
 const PlayWithRandom = () => {
   const { user } = useAuthStore();
   const { socket } = useSocket();
+  const router = useRouter();
 
   const [foundPlayer, setfoundPlayer] = useState<userType>({});
 
@@ -143,10 +143,21 @@ const PlayWithRandom = () => {
 
   useEffect(() => {
     const handlePlayersSearching = (foundUser: userType) => {
-      console.log(foundUser, "foundUser");
 
       if (foundUser?.pk) {
         setfoundPlayer(foundUser);
+        setTimeout(() => {
+          const unique_id =
+            (foundUser.pk || 1) > (user?.pk || 1) ? foundUser.pk : user?.pk;
+
+          router.push(
+            `${
+              redirectionConfig["play-with-random"]
+            }?room_id=${unique_id}&orientation=${
+              unique_id === user?.pk ? "white" : "black"
+            }&other=${foundUser.pk}&me=${user?.pk}`
+          );
+        }, 2000);
       } else {
         setTimeout(() => {
           socket.emit("FIND_RANDOM_SEARCHING_PLAYERS", { user_pk: user?.pk });
@@ -164,8 +175,11 @@ const PlayWithRandom = () => {
     <div className="w-full flex flex-col items-center justify-center">
       {foundPlayer.pk ? (
         <div className="flex flex-col gap-4 items-center">
-          <h3>{`Match found`}</h3>
-          <h4>{`Your are playing against ${foundPlayer.displayName}`}</h4>
+          <h3 className="text-2xl">{`Match found !`}</h3>
+          <h4 className="text-wrap">{`Your are playing against ${foundPlayer.displayName?.slice(
+            0,
+            20
+          )}`}</h4>
           <PlayerCard
             name={foundPlayer.displayName || ""}
             pic={

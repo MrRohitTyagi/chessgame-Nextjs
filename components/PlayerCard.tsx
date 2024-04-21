@@ -12,6 +12,7 @@ const PlayerCard = ({ name = "", pic }: { name: string; pic: any }) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring" }}
         className="h-10 w-10 rounded-full"
+        alt="img"
         src={pic}
       />
       <motion.h4

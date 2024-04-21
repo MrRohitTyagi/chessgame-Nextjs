@@ -1,43 +1,70 @@
 "use client";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
 import { boardStyles } from "@/utils/board.utils";
+import { useSearchParams } from "next/navigation";
+import useSocket from "@/hooks/useSocket";
+
+type orientationType = "white" | "black" | undefined;
 
 const ChessboardComponent = () => {
   const [fen, setFen] = useState<string>("start");
-  const game = useMemo(() => new Chess(), []);
-  const turn = useRef<"w" | "b">("w");
 
-  function toggleTurn() {
-    turn.current = turn.current === "w" ? "b" : "w";
-  }
+  const params = useSearchParams();
+  const game = useMemo(() => new Chess(), []);
+  const { socket } = useSocket();
+
+  const room_id = params.get("room_id");
+  const me = params.get("me");
+  const other = params.get("other");
+  const orientation: orientationType = params.get(
+    "orientation"
+  ) as orientationType;
+
+  const [turn, setturn] = useState(room_id);
+
+  useEffect(() => {
+    socket.emit("JOIN_ROOM", room_id);
+  }, []);
+
+  useEffect(() => {
+    socket.on("OPPONENT_PLAYED", ({ nextturn, from, to }) => {
+      game.move({ from, to });
+      const fenString = game.fen();
+      setFen(fenString);
+      setturn(nextturn);
+    });
+  }, []);
 
   const onDrop = ({ sourceSquare = "", targetSquare = "" }) => {
     try {
       const move = game.move({ from: sourceSquare, to: targetSquare });
-      console.log("move", {
-        move,
-        fen: game.fen(),
-        targetSquare,
-        sourceSquare,
-      });
 
       if (move === null) return;
+      const fenString = game.fen();
+      setturn(other);
 
-      toggleTurn();
-      setFen(game.fen());
+      socket.emit("MOVE_PLAYED", {
+        room_id,
+        nextturn: other,
+        from: sourceSquare,
+        to: targetSquare,
+      });
+
+      setFen(fenString);
     } catch (error) {
       console.log(`%c error `, "color: red;border:2px dotted red", error);
     }
   };
 
-  function allowDrag({ piece = "" }) {
-    return piece.charAt(0) === turn.current;
-  }
+  const allowDrag = ({ piece = "" }) => {
+    return turn === me && piece.charAt(0) === orientation?.charAt(0);
+  };
 
   return (
     <Chessboard
+      orientation={orientation}
       position={fen}
       onDrop={onDrop}
       {...boardStyles}

@@ -17,8 +17,6 @@ function Home() {
 
   const [openLoginPrompt, setopenLoginPrompt] = useState(false);
 
-  console.log(`%c user `, "color: yellow;border:1px solid lightgreen", user);
-
   function handlePlayOnline() {
     if (user?.pk) {
       navigate.push(redirectionConfig["play-online-configure"]);
@@ -43,9 +41,6 @@ function Home() {
           className="lg:w-[500px]"
         />
         <div className="controllsborder rounded items-center flex flex-col space-y-4">
-          <h1 className="text-3xl text-center sm:text-4xl">
-            Play Chess Online !
-          </h1>
           <Button
             className="w-60 space-x-2 h-16 shadow-green"
             onClick={handlePlayOnline}

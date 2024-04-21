@@ -9,7 +9,6 @@ import useSocket from "@/hooks/useSocket";
 
 const Authorize = ({ children }: { children: React.ReactNode }) => {
   const { setUser, isLoading, tokenNotfound, user } = useAuthStore();
-  console.log(`%c user `, "color: pink;border:1px solid pink", user);
   useSocket();
 
   useEffect(() => {
