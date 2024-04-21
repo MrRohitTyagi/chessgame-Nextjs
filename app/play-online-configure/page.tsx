@@ -187,6 +187,7 @@ const PlayWithRandom = () => {
               "https://res-console.cloudinary.com/derplm8c6/media_explorer_thumbnails/3d2ebe856e25a61a68b519ac4daf2cdc/detailed"
             }
           />
+          <h3 className="text-2xl">joining Room..</h3>
         </div>
       ) : (
         <div className="flex flex-col gap-4 items-center justify-center">
