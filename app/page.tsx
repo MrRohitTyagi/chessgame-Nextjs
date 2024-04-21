@@ -21,7 +21,7 @@ function Home() {
 
   function handlePlayOnline() {
     if (user?.pk) {
-      navigate.push(redirectionConfig["play-online"]);
+      navigate.push(redirectionConfig["play-online-configure"]);
     } else {
       setopenLoginPrompt(true);
     }

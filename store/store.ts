@@ -5,6 +5,8 @@ export type userType = {
   displayName?: string;
   password?: string;
   pk?: string;
+  isSearching?: boolean;
+  picture?: string;
 };
 
 type Store = {
@@ -12,12 +14,21 @@ type Store = {
   isAuthenticated: boolean;
   user?: userType;
   setUser: (userData: userType) => void;
+  tokenNotfound: () => void;
 };
 
 const useAuthStore = create<Store>()((set) => ({
-  isLoading: true,
   isAuthenticated: false,
+  isLoading: true,
   user: {} as userType,
+
+  tokenNotfound: () => {
+    set((state) => ({
+      user: {},
+      isAuthenticated: false,
+      isLoading: false,
+    }));
+  },
   setUser: (userData) => {
     set((state) => ({
       user: userData,

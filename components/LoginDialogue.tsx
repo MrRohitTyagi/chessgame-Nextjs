@@ -53,13 +53,13 @@ const LoginDialogue = ({
     const response: userresponseType = await createUser(values);
     setUser(response.response);
     setToken(response.token);
-    navigate.push(redirectionConfig["play-online"]);
+    navigate.push(redirectionConfig["play-online-configure"]);
   }
 
   return (
     <Dialog open={open}>
       <DialogContent
-        className="border-none 
+        className="border-green-700
         bg-gradient-to-br from-[#05000e] to-[#032913] text-white"
       >
         <DialogHeader>
