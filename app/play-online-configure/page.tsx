@@ -143,9 +143,9 @@ const PlayWithRandom = () => {
 
   useEffect(() => {
     const handlePlayersSearching = (foundUser: userType) => {
-
       if (foundUser?.pk) {
         setfoundPlayer(foundUser);
+
         setTimeout(() => {
           const unique_id =
             (foundUser.pk || 1) > (user?.pk || 1) ? foundUser.pk : user?.pk;

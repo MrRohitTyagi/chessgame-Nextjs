@@ -29,12 +29,16 @@ const ChessboardComponent = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("OPPONENT_PLAYED", ({ nextturn, from, to }) => {
-      game.move({ from, to });
-      const fenString = game.fen();
-      setFen(fenString);
-      setturn(nextturn);
-    });
+    try {
+      socket.on("OPPONENT_PLAYED", ({ nextturn, from, to }) => {
+        game.move({ from, to });
+        const fenString = game.fen();
+        setFen(fenString);
+        setturn(nextturn);
+      });
+    } catch (error) {
+      console.log(`%c error `, "color: red;border:2px dotted red", error);
+    }
   }, []);
 
   const onDrop = ({ sourceSquare = "", targetSquare = "" }) => {
@@ -58,19 +62,26 @@ const ChessboardComponent = () => {
     }
   };
 
+  const isMyTurn = turn === me;
+
   const allowDrag = ({ piece = "" }) => {
-    return turn === me && piece.charAt(0) === orientation?.charAt(0);
+    return isMyTurn && piece.charAt(0) === orientation?.charAt(0);
   };
 
   return (
-    <Chessboard
-      orientation={orientation}
-      position={fen}
-      onDrop={onDrop}
-      {...boardStyles}
-      allowDrag={allowDrag}
-      calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
-    />
+    <div className="gap-3 flex flex-col">
+      <h2 className="text-center text-2xl">
+        {isMyTurn ? "Your Turn" : `Opponent's Turn`}
+      </h2>
+      <Chessboard
+        orientation={orientation}
+        position={fen}
+        onDrop={onDrop}
+        {...boardStyles}
+        allowDrag={allowDrag}
+        calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
+      />
+    </div>
   );
 };
 
