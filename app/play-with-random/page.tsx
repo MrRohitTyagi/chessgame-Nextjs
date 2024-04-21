@@ -85,7 +85,7 @@ const ChessboardComponent = () => {
         calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
       />
       <h2 className="text-center text-2xl text-wrap">
-        Do not refresh the page else progress will be lost
+        Do not refresh
       </h2>
     </div>
   );
