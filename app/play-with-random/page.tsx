@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useMemo, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
