@@ -2,6 +2,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
+import { boardStyles } from "@/utils/board.utils";
 
 const ChessboardComponent = () => {
   const [fen, setFen] = useState<string>("start");
@@ -39,10 +40,9 @@ const ChessboardComponent = () => {
     <Chessboard
       position={fen}
       onDrop={onDrop}
-      // draggable={false}
-      darkSquareStyle={{ backgroundColor: "#431c01", borderRadius: "5px" }}
-      lightSquareStyle={{ backgroundColor: "#bea25f", borderRadius: "5px" }}
+      {...boardStyles}
       allowDrag={allowDrag}
+      calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
     />
   );
 };
