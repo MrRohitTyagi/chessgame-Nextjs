@@ -32,9 +32,9 @@ const LoginDialogue = ({
 }) => {
   //states
   const [values, setValues] = useState<userType>({
-    displayName: "Guest",
-    userName: "rohit",
-    password: "123fds",
+    displayName: "",
+    userName: "",
+    password: "",
   });
   //hooks
   const navigate = useRouter();
