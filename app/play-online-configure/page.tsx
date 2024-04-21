@@ -183,7 +183,7 @@ const PlayWithRandom = () => {
           <PlayerCard
             name={foundPlayer.displayName || ""}
             pic={
-              foundPlayer.picture ||
+              foundPlayer?.picture ||
               "https://res-console.cloudinary.com/derplm8c6/media_explorer_thumbnails/3d2ebe856e25a61a68b519ac4daf2cdc/detailed"
             }
           />

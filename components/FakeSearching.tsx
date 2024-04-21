@@ -1,4 +1,5 @@
-import axiosInstance from "@/utils/axiosInstance";
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { fakePlayers } from "@/constants/fakePlayers";
 import PlayerCard from "./PlayerCard";
